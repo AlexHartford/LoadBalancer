@@ -3,7 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { Http, Response, RequestOptions, Headers } from '@angular/http';
+// import { Http, Response, RequestOptions, Headers } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 // import 'rjxs/add/operator/map';
 
 import { servers } from './servers';
@@ -15,13 +16,15 @@ import { servers } from './servers';
 })
 export class AppComponent {
 
-  constructor(private http: Http) {
+  constructor(private http: HttpClient) {
     Object.assign(this, {servers});
     setInterval(() => {
-            // this.servers.forEach((server) => {
-            //     server.value = Math.random() * 8;
-            // });
-            this.servers = [...this.servers];
+            this.http.get<any[]>('http://localhost:3000/api/test').subscribe(data => {
+                data.forEach((value, index) => {
+                    this.servers[index].value = value;
+                });
+                this.servers = [...this.servers];
+            });
         }, 750);
   }
 
