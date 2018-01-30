@@ -1,10 +1,10 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
   <h1>
-    Welcome to {{ title }}!
+    {{ title }}!
   </h1>
 
-  <!-- <script src="https://npmcdn.com/zone.js@0.8.5/dist/zone.js"></script>
+  <script src="https://npmcdn.com/zone.js@0.8.5/dist/zone.js"></script>
   <script src="https://npmcdn.com/reflect-metadata@0.1.3/Reflect.js"></script>
   <script src="https://npmcdn.com/systemjs@0.19.31/dist/system.js"></script>
   <script src="https://npmcdn.com/typescript@2.1.1/lib/typescript.js"></script>
@@ -12,12 +12,12 @@
     <script>
       System.import('app')
         .catch(console.error.bind(console));
-    </script> -->
+    </script>
 
 <ngx-charts-bar-vertical
     [view]="view"
     [scheme]="colorScheme"
-    [results]="single"
+    [results]="servers"
     [gradient]="gradient"
     [xAxis]="showXAxis"
     [yAxis]="showYAxis"
@@ -28,6 +28,5 @@
     [yAxisLabel]="yAxisLabel"
     (select)="onSelect($event)">
 </ngx-charts-bar-vertical>
-
-
-
+<br>
+<button (click)="sendRequest()">Hit API</button>

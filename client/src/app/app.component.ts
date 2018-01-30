@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { Http, Response, RequestOptions, Headers } from '@angular/http';
+// import 'rjxs/add/operator/map';
 
 import { servers } from './servers';
 
@@ -12,7 +14,20 @@ import { servers } from './servers';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
+  constructor(private http: Http) {
+    Object.assign(this, {servers});
+    setInterval(() => {
+            // this.servers.forEach((server) => {
+            //     server.value = Math.random() * 8;
+            // });
+            this.servers = [...this.servers];
+        }, 750);
+  }
+
   title = 'AR Social Media Load Balancer';
+  apiURL = 'http://localhost:3000';
+  data: any = {};
 
   view: any[] = [700, 400];
 
@@ -24,21 +39,27 @@ export class AppComponent {
   gradient = false;
   showLegend = true;
   showXAxisLabel = true;
-  xAxisLabel = 'Country';
+  xAxisLabel = 'Server';
   showYAxisLabel = true;
-  yAxisLabel = 'Population';
+  yAxisLabel = 'Number of Requests';
 
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   };
-
-  constructor() {
-    Object.assign(this, {servers});
-  }
   
   onSelect(event) {
     console.log(event);
   }
+
+  sendRequest() {
+    // const headers = new Headers({'Content-Type': 'application/json'}); 
+    // const options = new RequestOptions({ headers: headers });
+    this.http.get(this.apiURL)
+       .toPromise()
+       .then(response => console.log(response));
+  }
+
+
 }
 
 
