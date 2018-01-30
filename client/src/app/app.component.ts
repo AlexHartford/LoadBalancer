@@ -19,7 +19,7 @@ export class AppComponent {
   constructor(private http: HttpClient) {
     Object.assign(this, {servers});
     setInterval(() => {
-            this.http.get<any[]>('http://localhost:3000/api/test').subscribe(data => {
+            this.http.get<any[]>('/api/test').subscribe(data => {
                 data.forEach((value, index) => {
                     this.servers[index].value = value;
                 });
