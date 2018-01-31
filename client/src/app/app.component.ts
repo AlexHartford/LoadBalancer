@@ -16,16 +16,18 @@ import { servers } from './servers';
 })
 export class AppComponent {
 
+  interval = 750;
+
   constructor(private http: HttpClient) {
     Object.assign(this, {servers});
     setInterval(() => {
-            this.http.get<any[]>('/api/test').subscribe(data => {
+            this.http.get<any[]>('/api/balance').subscribe(data => {
                 data.forEach((value, index) => {
-                    this.servers[index].value = value;
+                    this.servers[index].value += value;
                 });
                 this.servers = [...this.servers];
             });
-        }, 750);
+        }, this.interval);
   }
 
   title = 'AR Social Media Load Balancer';
@@ -39,7 +41,7 @@ export class AppComponent {
   // options
   showXAxis = true;
   showYAxis = true;
-  gradient = false;
+  gradient = true;
   showLegend = true;
   showXAxisLabel = true;
   xAxisLabel = 'Server';
@@ -47,22 +49,12 @@ export class AppComponent {
   yAxisLabel = 'Number of Requests';
 
   colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    domain: ['#0C0032', '#190061', '#240090', '#3500D3', '#282828']
   };
   
   onSelect(event) {
     console.log(event);
   }
-
-  sendRequest() {
-    // const headers = new Headers({'Content-Type': 'application/json'}); 
-    // const options = new RequestOptions({ headers: headers });
-    this.http.get(this.apiURL)
-       .toPromise()
-       .then(response => console.log(response));
-  }
-
-
 }
 
 

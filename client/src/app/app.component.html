@@ -13,7 +13,7 @@
       System.import('app')
         .catch(console.error.bind(console));
     </script>
-
+<div align="middle">
 <ngx-charts-bar-vertical
     [view]="view"
     [scheme]="colorScheme"
@@ -28,5 +28,5 @@
     [yAxisLabel]="yAxisLabel"
     (select)="onSelect($event)">
 </ngx-charts-bar-vertical>
-<br>
-<button (click)="sendRequest()">Hit API</button>
+</div>
+</div>
