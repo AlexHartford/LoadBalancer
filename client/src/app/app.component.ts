@@ -14,20 +14,23 @@ import { Server } from './server';
 })
 export class AppComponent {
 
-  private servers: Server[];
+  private servers: Server[] = [];
 
   constructor(private http: HttpClient) {
-    // Object.assign(this, {servers});
-    Object.assign(this, this.servers);
-    setInterval(750);
+    for (let i = 0; i < 5; i++) this.spawnServer('server ' + i, i, 1, 25);
+    let yolo = this.servers;
+    Object.assign(this, {yolo});
+    
+    // Object.assign(this, this.servers);
+    this.setInterval(750);
   }
   
-  spawnServer() {
-    // servers.push(new Server())
+  spawnServer(name: string, port: number, value: number, capacity: number) {
+    this.servers.push(new Server(name, port, value, capacity));
   }
 
-  killServer() {
-
+  killServer(server: Server) {
+    this.servers.splice(this.servers.indexOf(server), 1);
   }
 
   setInterval(interval) {
@@ -44,6 +47,24 @@ export class AppComponent {
   onSelect(event) {
     console.log(event);
   }
+
+  title = 'AR Social Media Load Balancer';
+  data: any = {};
+  view: any[] = [700, 400];
+
+  // plot options
+  showXAxis = true;
+  showYAxis = true;     
+  gradient = false;     
+  showLegend = true;       
+  showXAxisLabel = true;        
+  xAxisLabel = 'Server';        
+  showYAxisLabel = true;        
+  yAxisLabel = 'Number of Requests';
+      
+  colorScheme = {
+    domain: ['#0C0032', '#190061', '#240090', '#3500D3', '#282828']
+  };
 }
 
 
