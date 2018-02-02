@@ -4,10 +4,10 @@ export class Server {
     value: number;
     capacity: number;
 
-    constructor(private n: string, private p: number, private v: number, private c: number) {
-        this.name = n;
+    constructor(private p: number, private c: number) {
+        this.name = "Server " + p;
         this.port = p;
-        this.value = v;
+        this.value = 1;
         this.capacity = c;
     }
 }

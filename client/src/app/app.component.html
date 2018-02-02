@@ -1,23 +1,50 @@
-<!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
   <h1>
     {{ title }}!
   </h1>
+</div>
+<div style="text-align:left">
+  <h1>
+    Active Servers
+  </h1>
+</div>
+<div style="text-align:right">
+  <h1>
+    Waiting Servers
+  </h1>
+</div>
+<div>
+  <div align="left">
+    <ngx-charts-bar-vertical
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="servers"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        (select)="onSelect($event)">
+    </ngx-charts-bar-vertical>
+  </div>
 
-<div align="middle">
-<ngx-charts-bar-vertical
-    [view]="view"
-    [scheme]="colorScheme"
-    [results]="servers"
-    [gradient]="gradient"
-    [xAxis]="showXAxis"
-    [yAxis]="showYAxis"
-    [legend]="showLegend"
-    [showXAxisLabel]="showXAxisLabel"
-    [showYAxisLabel]="showYAxisLabel"
-    [xAxisLabel]="xAxisLabel"
-    [yAxisLabel]="yAxisLabel"
-    (select)="onSelect($event)">
-</ngx-charts-bar-vertical>
-</div>
-</div>
+  <div align="right">
+    <ngx-charts-bar-vertical
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="waitingServers"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        (select)="onSelect($event)">
+    </ngx-charts-bar-vertical>
+  </div>
+<div>

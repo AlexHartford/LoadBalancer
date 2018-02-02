@@ -4,14 +4,23 @@ var httpProxy = require('http-proxy');
 var app      = express();
 var apiProxy = httpProxy.createProxyServer();
 
-var ports = [3001, 3002, 3003, 3004, 3005];
+var bridge = require("./bridge");
 
-for (var port of ports) {
-    const node = spawn('node', ['server.js', port]);
-}
- 
+bridge.spawnServer(); // we need at least one server to run on after all!
+
 app.all("/*", function(req, res) {
-    var randomPort = ports[Math.floor(Math.random() * ports.length)];
+
+    var ports = bridge.getPorts();
+    console.log(ports);
+
+    for (var port of ports) {
+        const node = spawn('node', ['server.js', port]);
+    }
+
+    console.log("Balancer: " + bridge.getServerCapacity(3001));
+
+    const randomPort = bridge.getRandomPort();
+
     console.log('Redirecting request to server running on port ' + randomPort);
     apiProxy.web(req, res, {target: 'http://localhost:' + randomPort});
 });
