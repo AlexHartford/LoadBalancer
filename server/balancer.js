@@ -1,10 +1,9 @@
 var express  = require('express');
-const { spawn } = require('child_process');
 var httpProxy = require('http-proxy');
 var app      = express();
 var apiProxy = httpProxy.createProxyServer();
 
-var bridge = require("./bridge");
+const bridge = require("./bridge");
 
 bridge.spawnServer(); // we need at least one server to run on after all!
 
@@ -14,10 +13,8 @@ app.all("/*", function(req, res) {
     console.log(ports);
 
     for (var port of ports) {
-        const node = spawn('node', ['server.js', port]);
+        console.log("Port " + port + " has " + bridge.getServerCapacity(port) + " memory remaining.");
     }
-
-    console.log("Balancer: " + bridge.getServerCapacity(3001));
 
     const randomPort = bridge.getRandomPort();
 

@@ -1,14 +1,14 @@
 var express = require("express");
 var app = express();
 
-var bridge = require("./bridge");
+const bridge = require("./bridge");
 
 app.get('/', function(req, res) {
     res.send("Hello. I am your favorite server running on " + process.argv[2] + ", handling your request!");
 });
 
 app.get('/api/balance/:size', function(req, res) {
-    console.log(process.argv[2] + ": " + bridge.adjustServerCapacity(process.argv[2], req.params.size);
+    console.log(process.argv[2] + ": " + bridge.adjustServerCapacity(process.argv[2], req.params.size));
     res.json(process.argv[2]);
 });
 

@@ -90,6 +90,7 @@ export class AppComponent {
     console.log(event);
     this.killServer(this.servers[0]);
     this.spawnServer(this.portNumber++);
+    this.spawnServer(this.portNumber++);
     // this.setInterval(200);
   }
 }
