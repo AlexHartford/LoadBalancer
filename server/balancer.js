@@ -3,11 +3,11 @@ var httpProxy = require('http-proxy');
 var app      = express();
 var apiProxy = httpProxy.createProxyServer();
 
-const bridge = require("./bridge");
+bridge = require("./bridge");
 
 bridge.spawnServer(); // we need at least one server to run on after all!
 
-app.all("/*", function(req, res) {
+app.all("/api/*", function(req, res) {
 
     var ports = bridge.getPorts();
     console.log(ports);
@@ -20,6 +20,11 @@ app.all("/*", function(req, res) {
 
     console.log('Redirecting request to server running on port ' + randomPort);
     apiProxy.web(req, res, {target: 'http://localhost:' + randomPort});
+});
+
+app.get("/update", function(req, res) {
+    console.log(req.query.port + ": " + bridge.adjustServerCapacity(req.query.port, req.query.size));
+    res.send("Update");
 });
 
 app.listen(3000);
