@@ -33,6 +33,7 @@ const bridge = {
   waitingPorts: [], // [Port]
 
   MAX_SERVER_CAPACITY: 1000, // maximum data a server can handle
+  MAX_PROCESS_TIME: 60000, // Can take up to a minute for a server to recover
 
   // requests are going to 3000, so the first place we redirect is 3001
   portNum: 3001,
@@ -45,16 +46,24 @@ const bridge = {
     return this.ports;
   },
 
+  getWaitingPorts() {
+    return this.waitingPorts;
+  },
+
   // If we have no servers waiting, spawn a new one with a new port and random capacity.
   // Otherwise, grab the server at head of the waiting queue and make it active.
   spawnServer() {
-    if (this.waitingServers.size == 0) {
-      this.servers[this.portNum] = Math.floor(Math.random() * this.MAX_SERVER_CAPACITY);
+    console.log("SpawnServer: ", this.waitingServers, ", size = ", Object.keys(this.waitingServers).length);
+    if (Object.keys(this.waitingServers).length == 0 || this.waitingPorts.length == 0) {
+      console.log("Spawning new server");
+      // this.servers[this.portNum] = Math.floor(Math.random() * this.MAX_SERVER_CAPACITY);
+      this.servers[this.portNum] = 500;
       const node = spawn('node', ['server.js', this.portNum]);
       console.log("Spawned server on port: " + this.portNum + " with " + this.servers[this.portNum] + " memory.");
       this.ports.push(this.portNum++);
     }
     else {
+      console.log("Using pre-existing server");
       const port = this.waitingPorts.shift();
       this.servers[port] = this.waitingServers[port];
       this.waitingServers.delete(port);
@@ -66,8 +75,10 @@ const bridge = {
   killServer(port) {
     this.ports.splice(this.ports.indexOf(port), 1);
     
-    this.waitingServers[port] = this.servers[port];
-    this.waitingPorts.push(port);
+    setTimeout(() => {
+      this.waitingServers[port] = this.servers[port];
+      this.waitingPorts.push(port);
+    }, Math.floor(Math.random() * this.MAX_PROCESS_TIME));
 
     this.servers.delete(port);
   },

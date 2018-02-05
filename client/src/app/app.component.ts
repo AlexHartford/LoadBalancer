@@ -18,7 +18,7 @@ export class AppComponent {
   private waitingServers: Server[] = [];
   private portNumber: number = 3001;
 
-  private MAX_REQUEST_SIZE: number = 25; // max size a request can request
+  private MAX_REQUEST_SIZE: number = 100; // max size a request can request
 
   // plot options
   title = 'AR Social Media Load Balancer';
@@ -41,15 +41,16 @@ export class AppComponent {
     this.servers.push(new Server(3001, 500));
     let yolo = this.servers;  // because apparently it's illegal to put { this.servers }
     Object.assign(this, { yolo });
-    this.setInterval(750);
+    this.setInterval(400);
   }
   
   // Spawns a server if there are no extra servers waiting.  Otherwise grab a server off the waiting queue.
   spawnServer(port: number) {
     if (this.waitingServers.length == 0) {
-      this.http.get<number>('/api/server/' + port).subscribe(capacity => {
-        this.servers.push(new Server(port, capacity));
-      });
+      console.log("ASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDF");
+      // this.http.get<number>('/size/' + port).subscribe(capacity => {
+        this.servers.push(new Server(port, 500));
+      // });
     }
     else this.servers.push(this.waitingServers.pop());
   }
@@ -57,12 +58,13 @@ export class AppComponent {
   // Removes a server from the active servers and adds it to the waiting queue.
   killServer(server: Server) {
     this.servers.splice(this.servers.indexOf(server), 1);
-    this.waitingServers.push(server);
+    setTimeout(() => {
+      this.waitingServers.push(server);
+    }, 10000);
+    
   }
 
   // Makes a request to the API every 'interval' milliseconds.
-  // TODO: Stuck here right now.  We need to have the back end tell the front end
-  // when to add / remove servers from the chart.
   setInterval(interval) {
       setInterval(() => {
         let size = Math.floor(Math.random() * this.MAX_REQUEST_SIZE);
@@ -77,8 +79,10 @@ export class AppComponent {
                 }
               });
             }
-            else this.spawnServer(this.portNumber++);
-
+            else {
+              // console.log("ASDFASDFASDFSDFASDFASDFASDF");
+              this.spawnServer(this.portNumber++);
+            }
             this.servers = [...this.servers];
             this.waitingServers = [...this.waitingServers];
         });

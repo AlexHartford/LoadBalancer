@@ -16,6 +16,8 @@ app.all("/api/*", function(req, res) {
         console.log("Port " + port + " has " + bridge.getServerCapacity(port) + " memory remaining.");
     }
 
+    console.log(bridge.getWaitingPorts());
+
     const randomPort = bridge.getRandomPort();
 
     console.log('Redirecting request to server running on port ' + randomPort);
@@ -25,6 +27,10 @@ app.all("/api/*", function(req, res) {
 app.get("/update", function(req, res) {
     console.log(req.query.port + ": " + bridge.adjustServerCapacity(req.query.port, req.query.size));
     res.send("Update");
+});
+
+app.get("/size/:port", function(req, res) {
+    res.json(bridge.getServerCapacity(req.params.port));
 });
 
 app.listen(3000);
