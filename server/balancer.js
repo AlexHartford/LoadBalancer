@@ -10,13 +10,13 @@ bridge.spawnServer(); // we need at least one server to run on after all!
 app.all("/api/*", function(req, res) {
 
     var ports = bridge.getPorts();
-    console.log(ports);
+    console.log("current ports: ", ports);
 
     for (var port of ports) {
         console.log("Port " + port + " has " + bridge.getServerCapacity(port) + " memory remaining.");
     }
 
-    console.log(bridge.getWaitingPorts());
+    console.log("waiting ports: ", bridge.getWaitingPorts());
 
     const randomPort = bridge.getRandomPort();
 
@@ -25,8 +25,10 @@ app.all("/api/*", function(req, res) {
 });
 
 app.get("/update", function(req, res) {
-    console.log(req.query.port + ": " + bridge.adjustServerCapacity(req.query.port, req.query.size));
-    res.send("Update");
+    console.log('update: ', req.query.size);
+    console.log('updating ', req.query.port + ": " + bridge.adjustServerCapacity(req.query.port, req.query.size));
+    // console.log('update servers: ', bridge.getServers());
+    res.status(200).json([bridge.getServers(), bridge.getWaitingServers()]);
 });
 
 app.get("/size/:port", function(req, res) {

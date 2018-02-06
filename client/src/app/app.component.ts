@@ -41,7 +41,7 @@ export class AppComponent {
     this.servers.push(new Server(3001, 500));
     let yolo = this.servers;  // because apparently it's illegal to put { this.servers }
     Object.assign(this, { yolo });
-    this.setInterval(400);
+    this.setInterval(750);
   }
   
   // Spawns a server if there are no extra servers waiting.  Otherwise grab a server off the waiting queue.
@@ -68,23 +68,45 @@ export class AppComponent {
   setInterval(interval) {
       setInterval(() => {
         let size = Math.floor(Math.random() * this.MAX_REQUEST_SIZE);
-        this.http.get<number>('/api/balance/' + size).subscribe(port => {
+        this.http.get('/api/balance/' + size).subscribe(data => {
+
+          // this.servers = [];
+          // this.waitingServers = [];
+
+          let s = [];
+          let w = [];
+          console.log('data: ', data);
+          Object.keys(data[0]).forEach(function(key) {
+            s.push(new Server(Number(key), data[0][key]));
+          });
+
+          Object.keys(data[1]).forEach(function(key) {
+            w.push(new Server(Number(key), data[1][key]));
+          });
+          
+          this.servers = s;
+          this.waitingServers = w;
+
+          // this.servers = [...this.servers];
+          // this.waitingServers = [...this.waitingServers];
+
+          console.log(s);
             
-            if (this.servers.length != 0) {
-              this.servers.forEach((server) => {
-                if (server.port == port) {
-                  server.value++;
-                  if (server.capacity - size > 0) server.capacity -= size;
-                  else this.killServer(server);
-                }
-              });
-            }
-            else {
-              // console.log("ASDFASDFASDFSDFASDFASDFASDF");
-              this.spawnServer(this.portNumber++);
-            }
-            this.servers = [...this.servers];
-            this.waitingServers = [...this.waitingServers];
+            // if (this.servers.length != 0) {
+            //   this.servers.forEach((server) => {
+            //     if (server.port == port) {
+            //       server.value++;
+            //       if (server.capacity - size > 0) server.capacity -= size;
+            //       else this.killServer(server);
+            //     }
+            //   });
+            // }
+            // else {
+            //   // console.log("ASDFASDFASDFSDFASDFASDFASDF");
+            //   this.spawnServer(this.portNumber++);
+            // }
+            // this.servers = [...this.servers];
+            // this.waitingServers = [...this.waitingServers];
         });
     }, interval);
   }

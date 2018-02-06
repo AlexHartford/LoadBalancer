@@ -7,7 +7,7 @@ export class Server {
     constructor(private p: number, private c: number) {
         this.name = "Server " + p;
         this.port = p;
-        this.value = 1;
+        this.value = c + 1;
         this.capacity = c;
     }
 }
