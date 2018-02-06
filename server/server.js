@@ -17,10 +17,11 @@ app.get('/api/balance/:size', function(req, res) {
         agent: false
     }, (data) => {
         data.on('data', (myData) => {
-            res.json('server data: ', JSON.parse(myData)); 
-            console.log(JSON.parse(myData)); 
+            res.json(JSON.parse(myData)); 
+            // console.log(JSON.parse(myData)); 
         });
     });
+    // res.json('hi');
 });
 
 app.listen(process.argv[2]);

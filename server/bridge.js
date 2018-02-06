@@ -26,8 +26,8 @@ console.log("bridge");
 
 const bridge = {
 
-  servers: new Map(), // <Port, Capacity>
-  waitingServers: new Map(), // <Port, Capacity>
+  servers: { }, // <Port, Capacity>
+  waitingServers: { }, // <Port, Capacity>
 
   ports: [], // [Port]
   waitingPorts: [], // [Port]
@@ -62,23 +62,26 @@ const bridge = {
   // If we have no servers waiting, spawn a new one with a new port and random capacity.
   // Otherwise, grab the server at head of the waiting queue and make it active.
   spawnServer() {
-    console.log("SpawnServer: ", this.waitingServers, ", size = ", this.waitingServers.size);
-    if (this.waitingServers.size == 0 || this.waitingPorts.length == 0) {
+    console.log("SpawnServer (waiting): ", this.waitingServers, ", size = ", Object.keys(this.waitingServers).length);
+    if (Object.keys(this.waitingServers).length == 0 || this.waitingPorts.length == 0) {
       console.log("Spawning new server");
       // this.servers[this.portNum] = Math.floor(Math.random() * this.MAX_SERVER_CAPACITY);
-      // this.servers[this.portNum] = 500;
-      console.log('spawnserver: ', this.servers.set(this.portNum.toString(), 500));
+      this.servers[this.portNum] = 500;
+      // console.log('spawnserver: ', this.servers.set(this.portNum.toString(), 500));
       const node = spawn('node', ['server.js', this.portNum]);
-      console.log("Spawned server on port: " + this.portNum + " with " + this.servers.get(this.portNum.toString()) + " memory.");
+      console.log("Spawned server on port: " + this.portNum + " with " + this.servers[this.portNum.toString()] + " memory.");
       this.ports.push(this.portNum++);
+      return this.portNum - 1;
     }
     else {
       console.log("Using pre-existing server");
       const port = this.waitingPorts.shift();
-      // this.servers[port] = this.waitingServers[port];
-      this.servers.set(port, this.waitingServers.get(port));
-      this.waitingServers.delete(port);
+      this.servers[port] = this.waitingServers[port];
+      // this.servers.set(port, this.waitingServers.get(port));
+      // this.waitingServers.delete(port);
+      delete this.waitingServers[port];
       this.ports.push(port);
+      return port;
     }
   },
 
@@ -87,14 +90,17 @@ const bridge = {
     port = port.toString();
     this.ports.splice(this.ports.indexOf(port), 1);
     
+    let x = this.servers[port];
+
     setTimeout(() => {
-      // this.waitingServers[port] = this.servers[port];
-      this.waitingServers.set(port, this.servers.get(port));
+      this.waitingServers[port] = x;
+      // this.waitingServers.set(port, this.servers.get(port));
       this.waitingPorts.push(port);
     }, Math.floor(Math.random() * this.MAX_PROCESS_TIME));
     // console.log(this.servers);
-    console.log(this.servers.delete(port));
+    // console.log(this.servers.delete(port));
     // console.log(this.servers);
+    delete this.servers[port];
   },
 
   // Reduces the remaining capacity of a specific port and returns the remaining capacity.
@@ -102,28 +108,30 @@ const bridge = {
     port = port.toString();
     console.log('size: ', size);
 
-    console.log("SERVERS SIZE: " + this.servers.size);
+    console.log("SERVERS SIZE: " + Object.keys(this.servers).length);
     console.log("SERVERS: ", this.servers);
-    if (this.servers.get(port) - size > 0) {
-      // this.servers[port] = this.servers[port] - size;
-      this.servers.set(port, this.servers.get(port) - size);
-      console.log('Port: ' + port + ' has ' + this.servers.get(port) + ' memory remaining.');
+    if (this.servers[port] - size > 0) {
+      this.servers[port] = this.servers[port] - size;
+      // this.servers.set(port, this.servers.get(port) - size);
+      console.log('Port: ' + port + ' has ' + this.servers[port] + ' memory remaining.');
+      return this.servers[port];
     }
     else {
       // this.servers[port] = Math.floor(Math.random() * this.MAX_SERVER_CAPACITY);
-      this.servers.set(port, 500);
-      console.log('Port: ' + port + ' ran out of memory. Allocated ' + this.servers.get(port) + ' memory.');
+
+      // this.servers.set(port, 500);
+      this.servers[port] = 500;
+      console.log('Port: ' + port + ' ran out of memory. Allocated ' + this.servers[port] + ' memory.');
       this.killServer(port);
-      this.spawnServer();
+      return this.servers[this.spawnServer()];
     }
-    // return this.servers[port];
-    return this.servers.get(port);
+    // return this.servers.get(port);
   },
 
   getServerCapacity(port) {
     port = port.toString();
-    // return this.servers[port];
-    return this.servers.get(port);
+    return this.servers[port];
+    // return this.servers.get(port);
   }
 };
 

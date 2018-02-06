@@ -38,31 +38,31 @@ export class AppComponent {
   constructor(private http: HttpClient) {
     // for (let i = 0; i < 5; i++) this.spawnServer('Server ' + i, i, 1, 25);
     // this.spawnServer(this.portNumber++);
-    this.servers.push(new Server(3001, 500));
+    // this.servers.push(new Server(3001, 500));
     let yolo = this.servers;  // because apparently it's illegal to put { this.servers }
     Object.assign(this, { yolo });
     this.setInterval(750);
   }
   
   // Spawns a server if there are no extra servers waiting.  Otherwise grab a server off the waiting queue.
-  spawnServer(port: number) {
-    if (this.waitingServers.length == 0) {
-      console.log("ASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDF");
-      // this.http.get<number>('/size/' + port).subscribe(capacity => {
-        this.servers.push(new Server(port, 500));
-      // });
-    }
-    else this.servers.push(this.waitingServers.pop());
-  }
+  // spawnServer(port: number) {
+  //   if (this.waitingServers.length == 0) {
+  //     console.log("ASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDF");
+  //     // this.http.get<number>('/size/' + port).subscribe(capacity => {
+  //       this.servers.push(new Server(port, 500));
+  //     // });
+  //   }
+  //   else this.servers.push(this.waitingServers.pop());
+  // }
 
-  // Removes a server from the active servers and adds it to the waiting queue.
-  killServer(server: Server) {
-    this.servers.splice(this.servers.indexOf(server), 1);
-    setTimeout(() => {
-      this.waitingServers.push(server);
-    }, 10000);
+  // // Removes a server from the active servers and adds it to the waiting queue.
+  // killServer(server: Server) {
+  //   this.servers.splice(this.servers.indexOf(server), 1);
+  //   setTimeout(() => {
+  //     this.waitingServers.push(server);
+  //   }, 10000);
     
-  }
+  // }
 
   // Makes a request to the API every 'interval' milliseconds.
   setInterval(interval) {
@@ -75,7 +75,7 @@ export class AppComponent {
 
           let s = [];
           let w = [];
-          console.log('data: ', data);
+          
           Object.keys(data[0]).forEach(function(key) {
             s.push(new Server(Number(key), data[0][key]));
           });
@@ -89,8 +89,6 @@ export class AppComponent {
 
           // this.servers = [...this.servers];
           // this.waitingServers = [...this.waitingServers];
-
-          console.log(s);
             
             // if (this.servers.length != 0) {
             //   this.servers.forEach((server) => {
@@ -114,9 +112,6 @@ export class AppComponent {
   // Triggers whenever you click an element of the bar graph
   onSelect(event) {
     console.log(event);
-    this.killServer(this.servers[0]);
-    this.spawnServer(this.portNumber++);
-    this.spawnServer(this.portNumber++);
     // this.setInterval(200);
   }
 }
