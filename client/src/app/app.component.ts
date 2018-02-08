@@ -27,10 +27,11 @@ export class AppComponent {
   showYAxis = true;     
   gradient = false;     
   showLegend = true;       
-  showXAxisLabel = true;        
+  showXAxisLabel = false;        
   xAxisLabel = 'Server';        
   showYAxisLabel = true;        
-  yAxisLabel = 'Capacity';
+  yAxisLabel = 'Workload';
+  yAxisLabel2 = 'Capacity';
   yScaleMax = 500;
   colorScheme = {
     domain: ['#0C0032', '#190061', '#240090', '#3500D3', '#282828']
@@ -42,7 +43,7 @@ export class AppComponent {
     // this.servers.push(new Server(3001, 500));
     let yolo = this.servers;  // because apparently it's illegal to put { this.servers }
     Object.assign(this, { yolo });
-    this.setInterval(400);
+    this.setInterval(100);
   }
   
   // Spawns a server if there are no extra servers waiting.  Otherwise grab a server off the waiting queue.
@@ -70,7 +71,7 @@ export class AppComponent {
       setInterval(() => {
         let size = Math.floor(Math.random() * this.MAX_REQUEST_SIZE);
         this.http.get('/api/balance/' + size).subscribe(data => {
-
+          this.showXAxisLabel = true;
           // this.servers = [];
           // this.waitingServers = [];
 
@@ -84,7 +85,6 @@ export class AppComponent {
           Object.keys(data[1]).forEach(function(key) {
             w.push(new Server(Number(key), data[1][key]));
           });
-          
           this.servers = s;
           this.waitingServers = w;
 
@@ -114,6 +114,18 @@ export class AppComponent {
   onSelect(event) {
     console.log(event);
     // this.setInterval(200);
+  }
+
+  test1() {
+    console.log("Test 1");
+  }
+
+  test2() {
+    console.log("Test 2");
+  }
+
+  test3() {
+    console.log("Test 3");
   }
 }
 

@@ -131,7 +131,7 @@ const bridge = {
       if (Object.keys(this.servers).length == 0)
         return this.servers[this.spawnServer()];
     }
-    // return this.servers.get(port);
+    return this.servers[port];
   },
 
   getServerCapacity(port) {

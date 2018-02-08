@@ -3,18 +3,16 @@
     {{ title }}!
   </h1>
 </div>
-<div style="text-align:left">
-  <h1>
-    Active Servers
-  </h1>
-</div>
-<div style="text-align:right">
-  <h1>
-    Waiting Servers
-  </h1>
-</div>
 <div>
-  <div align="left">
+  <h1>
+    <span style="float:left">Active Servers</span>
+    <span style="float:right">Waiting Servers</span>
+  </h1>
+</div>
+<br><br>
+<div>
+  <br>
+  <span style="float:left">
     <ngx-charts-bar-vertical
         [view]="view"
         [scheme]="colorScheme"
@@ -30,9 +28,9 @@
         [yScaleMax]="yScaleMax"
         (select)="onSelect($event)">
     </ngx-charts-bar-vertical>
-  </div>
+  </span>
 
-  <div align="right">
+  <span style="float:right">
     <ngx-charts-bar-vertical
         [view]="view"
         [scheme]="colorScheme"
@@ -44,9 +42,38 @@
         [showXAxisLabel]="showXAxisLabel"
         [showYAxisLabel]="showYAxisLabel"
         [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel"
+        [yAxisLabel]="yAxisLabel2"
         [yScaleMax]="yScaleMax"
         (select)="onSelect($event)">
     </ngx-charts-bar-vertical>
-  </div>
-<div>
+  </span>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div style="text-align:center">
+<button (click)="test1()">Test 1</button>
+<button (click)="test2()">Test 2</button>
+<button (click)="test3()">Test 3</button>
+</div>
