@@ -29,7 +29,6 @@ const bridge = {
   servers: { }, // <Port, Capacity>
   waitingServers: { }, // <Port, Capacity>
 
-  ports: [], // [Port]
   waitingPorts: [], // [Port]
 
   MAX_SERVER_CAPACITY: 1000, // maximum data a server can handle
@@ -44,11 +43,10 @@ const bridge = {
         this.spawnServer();
       }
     }
-    return this.ports[Math.floor(Math.random() * this.ports.length)];
-  },
-
-  getPorts() {
-    return this.ports;
+    if(Object.keys(this.servers).length == 0){
+      this.spawnServer();
+    }
+    return Object.keys(this.servers)[Math.floor(Math.random() * Object.keys(this.servers).length)];
   },
 
   getWaitingPorts() {
@@ -69,13 +67,13 @@ const bridge = {
   spawnServer() {
     console.log("SpawnServer (waiting): ", this.waitingServers, ", size = ", Object.keys(this.waitingServers).length);
     if (Object.keys(this.waitingServers).length == 0 || this.waitingPorts.length == 0) {
-      console.log("Spawning new server");
+      console.log("Spawning new server: " + this.portNum);
       // this.servers[this.portNum] = Math.floor(Math.random() * this.MAX_SERVER_CAPACITY);
       this.servers[this.portNum] = 500;
       // console.log('spawnserver: ', this.servers.set(this.portNum.toString(), 500));
       const node = spawn('node', ['server.js', this.portNum]);
       console.log("Spawned server on port: " + this.portNum + " with " + this.servers[this.portNum.toString()] + " memory.");
-      this.ports.push(this.portNum++);
+      this.portNum++;
       return this.portNum - 1;
     }
     else {
@@ -85,7 +83,6 @@ const bridge = {
       // this.servers.set(port, this.waitingServers.get(port));
       // this.waitingServers.delete(port);
       delete this.waitingServers[port];
-      this.ports.push(port);
       return port;
     }
   },
@@ -93,8 +90,7 @@ const bridge = {
   // Take the newest server and put it in the waiting queue.
   killServer(port) {
     port = port.toString();
-    this.ports.splice(this.ports.indexOf(port), 1);
-    
+
     let x = this.servers[port];
 
     setTimeout(() => {

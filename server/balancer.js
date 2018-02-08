@@ -9,8 +9,7 @@ bridge.spawnServer(); // we need at least one server to run on after all!
 
 app.all("/api/*", function(req, res) {
 
-    var ports = bridge.getPorts();
-    ports.push(3001);
+    var ports = Object.keys(bridge.getServers());
     console.log("current ports: ", ports);
 
     for (var port of ports) {
@@ -18,12 +17,12 @@ app.all("/api/*", function(req, res) {
     }
 
     console.log("waiting ports: ", bridge.getWaitingPorts());
-
+    console.log("current servers: ", bridge.getServers());
     const randomPort = bridge.getRandomPort();
 
     console.log('Redirecting request to server running on port ' + randomPort);
     apiProxy.web(req, res, {target: 'http://localhost:' + randomPort});
-    ports.splice(ports.indexOf(3001), 1);
+    // ports.splice(ports.indexOf(3001), 1);
 });
 
 app.get("/update", function(req, res) {
