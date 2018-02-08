@@ -33,12 +33,17 @@ const bridge = {
   waitingPorts: [], // [Port]
 
   MAX_SERVER_CAPACITY: 1000, // maximum data a server can handle
-  MAX_PROCESS_TIME: 60000, // Can take up to a minute for a server to recover
+  MAX_PROCESS_TIME: 30000, // Can take up to a minute for a server to recover
 
   // requests are going to 3000, so the first place we redirect is 3001
   portNum: 3001,
 
   getRandomPort() {
+    if (Object.keys(this.waitingServers).length != 0 || this.waitingPorts.length != 0) {
+      if (Math.floor(Math.random() * 15) == 1) {
+        this.spawnServer();
+      }
+    }
     return this.ports[Math.floor(Math.random() * this.ports.length)];
   },
 
@@ -123,7 +128,8 @@ const bridge = {
       this.servers[port] = 500;
       console.log('Port: ' + port + ' ran out of memory. Allocated ' + this.servers[port] + ' memory.');
       this.killServer(port);
-      return this.servers[this.spawnServer()];
+      if (Object.keys(this.servers).length == 0)
+        return this.servers[this.spawnServer()];
     }
     // return this.servers.get(port);
   },

@@ -30,7 +30,8 @@ export class AppComponent {
   showXAxisLabel = true;        
   xAxisLabel = 'Server';        
   showYAxisLabel = true;        
-  yAxisLabel = 'Number of Requests';
+  yAxisLabel = 'Capacity';
+  yScaleMax = 500;
   colorScheme = {
     domain: ['#0C0032', '#190061', '#240090', '#3500D3', '#282828']
   };
@@ -41,7 +42,7 @@ export class AppComponent {
     // this.servers.push(new Server(3001, 500));
     let yolo = this.servers;  // because apparently it's illegal to put { this.servers }
     Object.assign(this, { yolo });
-    this.setInterval(750);
+    this.setInterval(400);
   }
   
   // Spawns a server if there are no extra servers waiting.  Otherwise grab a server off the waiting queue.
