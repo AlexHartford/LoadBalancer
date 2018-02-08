@@ -43,9 +43,6 @@ const bridge = {
         this.spawnServer();
       }
     }
-    if(Object.keys(this.servers).length == 0){
-      this.spawnServer();
-    }
     return Object.keys(this.servers)[Math.floor(Math.random() * Object.keys(this.servers).length)];
   },
 
