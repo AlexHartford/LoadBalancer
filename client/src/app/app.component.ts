@@ -17,7 +17,7 @@ export class AppComponent {
   private servers: Server[] = [];
   private waitingServers: Server[] = [];
   private portNumber: number = 3001;
-
+  private currentIntervalId;
   private MAX_REQUEST_SIZE: number = 100; // max size a request can request
 
   // plot options
@@ -43,7 +43,7 @@ export class AppComponent {
     // this.servers.push(new Server(3001, 500));
     let yolo = this.servers;  // because apparently it's illegal to put { this.servers }
     Object.assign(this, { yolo });
-    this.setInterval(100);
+    this.setInterval(400);
   }
   
   // Spawns a server if there are no extra servers waiting.  Otherwise grab a server off the waiting queue.
@@ -68,7 +68,7 @@ export class AppComponent {
 
   // Makes a request to the API every 'interval' milliseconds.
   setInterval(interval) {
-      setInterval(() => {
+      this.currentIntervalId = setInterval(() => {
         let size = Math.floor(Math.random() * this.MAX_REQUEST_SIZE);
         this.http.get('/api/balance/' + size).subscribe(data => {
           this.showXAxisLabel = true;
@@ -116,16 +116,19 @@ export class AppComponent {
     // this.setInterval(200);
   }
 
-  test1() {
-    console.log("Test 1");
+  burstTest() {
+    clearInterval(this.currentIntervalId);
+    this.setInterval(50);
   }
 
-  test2() {
-    console.log("Test 2");
+  slowRequests() {
+    clearInterval(this.currentIntervalId);
+    this.setInterval(5000);
   }
 
-  test3() {
-    console.log("Test 3");
+  regularRequestRate() {
+    clearInterval(this.currentIntervalId);
+    this.setInterval(400);
   }
 }
 
