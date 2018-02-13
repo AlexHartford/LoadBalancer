@@ -38,33 +38,10 @@ export class AppComponent {
   };
 
   constructor(private http: HttpClient) {
-    // for (let i = 0; i < 5; i++) this.spawnServer('Server ' + i, i, 1, 25);
-    // this.spawnServer(this.portNumber++);
-    // this.servers.push(new Server(3001, 500));
     let yolo = this.servers;  // because apparently it's illegal to put { this.servers }
     Object.assign(this, { yolo });
     this.setInterval(400);
   }
-  
-  // Spawns a server if there are no extra servers waiting.  Otherwise grab a server off the waiting queue.
-  // spawnServer(port: number) {
-  //   if (this.waitingServers.length == 0) {
-  //     console.log("ASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDF");
-  //     // this.http.get<number>('/size/' + port).subscribe(capacity => {
-  //       this.servers.push(new Server(port, 500));
-  //     // });
-  //   }
-  //   else this.servers.push(this.waitingServers.pop());
-  // }
-
-  // // Removes a server from the active servers and adds it to the waiting queue.
-  // killServer(server: Server) {
-  //   this.servers.splice(this.servers.indexOf(server), 1);
-  //   setTimeout(() => {
-  //     this.waitingServers.push(server);
-  //   }, 10000);
-    
-  // }
 
   // Makes a request to the API every 'interval' milliseconds.
   setInterval(interval) {
@@ -72,9 +49,7 @@ export class AppComponent {
         let size = Math.floor(Math.random() * this.MAX_REQUEST_SIZE);
         this.http.get('/api/balance/' + size).subscribe(data => {
           this.showXAxisLabel = true;
-          // this.servers = [];
-          // this.waitingServers = [];
-
+         
           let s = [];
           let w = [];
           
@@ -87,25 +62,6 @@ export class AppComponent {
           });
           this.servers = s;
           this.waitingServers = w;
-
-          // this.servers = [...this.servers];
-          // this.waitingServers = [...this.waitingServers];
-            
-            // if (this.servers.length != 0) {
-            //   this.servers.forEach((server) => {
-            //     if (server.port == port) {
-            //       server.value++;
-            //       if (server.capacity - size > 0) server.capacity -= size;
-            //       else this.killServer(server);
-            //     }
-            //   });
-            // }
-            // else {
-            //   // console.log("ASDFASDFASDFSDFASDFASDFASDF");
-            //   this.spawnServer(this.portNumber++);
-            // }
-            // this.servers = [...this.servers];
-            // this.waitingServers = [...this.waitingServers];
         });
     }, interval);
   }
@@ -113,7 +69,6 @@ export class AppComponent {
   // Triggers whenever you click an element of the bar graph
   onSelect(event) {
     console.log(event);
-    // this.setInterval(200);
   }
 
   burstTest() {
